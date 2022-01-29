@@ -1,0 +1,12 @@
+parameters:
+  ignoreErrors:
+    -
+      message: "#^Return type \\(Doctrine\\\\Common\\\\Collections\\\\ArrayCollection\\<TKey of \\(int\\|string\\), T\\>\\) of method Webgriffe\\\\InMemoryRepository\\\\ObjectRepository\\:\\:findAll\\(\\) should be compatible with return type \\(array\\) of method Doctrine\\\\Persistence\\\\ObjectRepository\\<T\\>\\:\\:findAll\\(\\)$#"
+      count: 1
+      path: src/ObjectRepository.php
+
+    -
+      message: "#^Return type \\(Doctrine\\\\Common\\\\Collections\\\\ArrayCollection\\<TKey of \\(int\\|string\\), T\\>\\) of method Webgriffe\\\\InMemoryRepository\\\\ObjectRepository\\:\\:findBy\\(\\) should be compatible with return type \\(array\\) of method Doctrine\\\\Persistence\\\\ObjectRepository\\<T\\>\\:\\:findBy\\(\\)$#"
+      count: 1
+      path: src/ObjectRepository.php
+
