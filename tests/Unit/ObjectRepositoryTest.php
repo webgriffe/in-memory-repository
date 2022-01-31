@@ -130,11 +130,15 @@ final class ObjectRepositoryTest extends TestCase
         $movies = $this->movieRepository->findBy([], ['year' => 'ASC', 'title' => 'ASC']);
 
         $this->assertCount(4, $movies);
-        $movies = $movies->getValues();
-        $this->assertEquals('Rambo', $movies[0]->getTitle());
-        $this->assertEquals('Highlander', $movies[1]->getTitle());
-        $this->assertEquals('Top Gun', $movies[2]->getTitle());
-        $this->assertEquals('The Lord of the Rings: The Fellowship of the Ring', $movies[3]->getTitle());
+        $this->assertEquals(
+            [
+                'Rambo',
+                'Highlander',
+                'Top Gun',
+                'The Lord of the Rings: The Fellowship of the Ring'
+            ],
+            $this->mapTitles($movies)
+        );
     }
 
     /** @test */
