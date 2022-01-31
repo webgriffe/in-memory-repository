@@ -20,7 +20,8 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "${{ env.PHP_VERSION }}"    
+          php-version: "${{ env.PHP_VERSION }}"
+          tools: composer-require-checker
 
       - name: Validate composer.json and composer.lock
         run: composer validate --strict
@@ -39,6 +40,9 @@ jobs:
 
       - name: Run test suite
         run: composer run-script test
+
+      - name: Run composer-require-checker
+        uses: composer-require-checker check
 
       - name: Check for BC breaks
         uses: docker://nyholm/roave-bc-check-ga
