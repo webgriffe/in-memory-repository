@@ -2,31 +2,31 @@
 
 namespace Webgriffe\InMemoryRepository;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Persistence\ObjectRepository as DoctrineObjectRepository;
 use UnexpectedValueException;
 
 /**
  * @template TKey of array-key
- * @template T of mixed
+ * @template T of object
  * @implements DoctrineObjectRepository<T>
  * @template-implements DoctrineObjectRepository<T>
  */
 abstract class ObjectRepository implements DoctrineObjectRepository
 {
-    /** @var ArrayCollection<TKey, T> */
-    public ArrayCollection $memoryObjectStorage;
+    /** @var ObjectCollection<TKey,T> */
+    public ObjectCollection $objectCollection;
 
     /**
-     * @param ArrayCollection<TKey, T>|null $memoryObjectStorage
+     * @param ObjectCollection<TKey,T>|null $objectCollection
      */
-    public function __construct(ArrayCollection $memoryObjectStorage = null)
+    public function __construct(ObjectCollection $objectCollection = null)
     {
-        if ($memoryObjectStorage === null) {
-            $memoryObjectStorage = new ArrayCollection();
+        if ($objectCollection === null) {
+            /** @var ObjectCollection<TKey,T> $objectCollection */
+            $objectCollection = new ObjectCollection();
         }
-        $this->memoryObjectStorage = $memoryObjectStorage;
+        $this->objectCollection = $objectCollection;
     }
 
     /**
@@ -40,9 +40,9 @@ abstract class ObjectRepository implements DoctrineObjectRepository
 
     /**
      * @psalm-suppress ImplementedReturnTypeMismatch
-     * @return ArrayCollection<TKey, T>
+     * @return ObjectCollection<TKey,T>
      */
-    public function findAll(): ArrayCollection
+    public function findAll(): ObjectCollection
     {
         return $this->findBy([]);
     }
@@ -56,9 +56,9 @@ abstract class ObjectRepository implements DoctrineObjectRepository
      * @throws UnexpectedValueException
      *
      * @psalm-suppress ImplementedReturnTypeMismatch
-     * @return ArrayCollection<TKey, T>
+     * @return ObjectCollection<TKey,T>
      */
-    public function findBy(array $criteria, ?array $orderBy = null, $limit = null, $offset = null): ArrayCollection
+    public function findBy(array $criteria, ?array $orderBy = null, $limit = null, $offset = null): ObjectCollection
     {
         $criteriaObject = Criteria::create();
         /** @psalm-suppress MixedAssignment */
@@ -71,8 +71,8 @@ abstract class ObjectRepository implements DoctrineObjectRepository
         $criteriaObject->setMaxResults($limit);
         $criteriaObject->setFirstResult($offset);
 
-        $matching = $this->memoryObjectStorage->matching($criteriaObject);
-        assert($matching instanceof ArrayCollection);
+        /** @var ObjectCollection<TKey,T> $matching */
+        $matching = $this->objectCollection->matching($criteriaObject);
 
         return $matching;
     }
@@ -80,19 +80,18 @@ abstract class ObjectRepository implements DoctrineObjectRepository
     /**
      * @param array<string, mixed> $criteria
      *
-     * @return mixed|null
-     *
-     * @psalm-return T|null
+     * @return T|null
      */
     public function findOneBy(array $criteria)
     {
-        return $this->findBy($criteria)->first() ?: null;
+        /** @var T|false $first */
+        $first = $this->findBy($criteria)->first();
+
+        return $first ?: null;
     }
 
     /**
-     * @return string
-     * @psalm-suppress LessSpecificImplementedReturnType
-     * @psalm-return class-string<T>
+     * @return class-string<T>
      */
     abstract public function getClassName();
 

@@ -13,7 +13,7 @@ final class ObjectRepositoryTest extends TestCase
     protected function setUp(): void
     {
         $this->movieRepository = new MovieRepository();
-        $this->movieRepository->memoryObjectStorage->add(
+        $this->movieRepository->objectCollection->add(
             $this->createMovie(
                 [
                     'id' => 1,
@@ -23,7 +23,7 @@ final class ObjectRepositoryTest extends TestCase
                 ]
             )
         );
-        $this->movieRepository->memoryObjectStorage->add(
+        $this->movieRepository->objectCollection->add(
             $this->createMovie(
                 [
                     'id' => 2,
@@ -33,7 +33,7 @@ final class ObjectRepositoryTest extends TestCase
                 ]
             )
         );
-        $this->movieRepository->memoryObjectStorage->add(
+        $this->movieRepository->objectCollection->add(
             $this->createMovie(
                 [
                     'id' => 3,
@@ -43,7 +43,7 @@ final class ObjectRepositoryTest extends TestCase
                 ]
             )
         );
-        $this->movieRepository->memoryObjectStorage->add(
+        $this->movieRepository->objectCollection->add(
             $this->createMovie(
                 [
                     'id' => 3,
