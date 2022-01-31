@@ -1,7 +1,7 @@
 # Doctrine "in-memory" Repository
 
 This library is an "in-memory" implementation of the `Doctrine\Persistence\ObjectRepository` interface.
-It can be used for to unit test components which depends on Doctrine repositories without involving a real database.
+It can be used to unit test components which depends on Doctrine repositories without involving a real database.
 
 ## Installation
 
