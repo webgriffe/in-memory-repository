@@ -42,7 +42,7 @@ jobs:
         run: composer run-script test
 
       - name: Run composer-require-checker
-        uses: composer-require-checker check
+        run: composer-require-checker check
 
       - name: Check for BC breaks
         uses: docker://nyholm/roave-bc-check-ga
