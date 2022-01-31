@@ -39,3 +39,6 @@ jobs:
 
       - name: Run test suite
         run: composer run-script test
+
+      - name: Check for BC breaks
+        uses: docker://nyholm/roave-bc-check-ga
