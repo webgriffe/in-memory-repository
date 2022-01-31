@@ -7,7 +7,7 @@ on:
     branches: [ master ]
 
 env:
-  PHP_VERSION: Monday
+  PHP_VERSION: '8.0'
 
 jobs:
   build:
