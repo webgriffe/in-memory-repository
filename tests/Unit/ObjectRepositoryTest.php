@@ -3,6 +3,7 @@
 namespace Webgriffe\InMemoryRepository\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
+use Webgriffe\InMemoryRepository\ObjectCollection;
 use Webgriffe\InMemoryRepository\Tests\Example\Movie;
 use Webgriffe\InMemoryRepository\Tests\Example\MovieRepository;
 
@@ -136,6 +137,38 @@ final class ObjectRepositoryTest extends TestCase
         $this->assertEquals('The Lord of the Rings: The Fellowship of the Ring', $movies[3]->getTitle());
     }
 
+    /** @test */
+    public function it_limits_results(): void
+    {
+        $movies = $this->movieRepository->findBy([], null, 3);
+
+        $this->assertCount(3, $movies);
+    }
+
+    /** @test */
+    public function it_returns_results_starting_from_offset(): void
+    {
+        $movies = $this->movieRepository->findBy([], null, null, 2);
+
+        $this->assertCount(2, $movies);
+        $this->assertEquals(
+            ['Rambo', 'Highlander'],
+            $this->mapTitles($movies)
+        );
+    }
+
+    /** @test */
+    public function it_limits_results_starting_from_offset(): void
+    {
+        $movies = $this->movieRepository->findBy([], null, 1, 2);
+
+        $this->assertCount(1, $movies);
+        $this->assertEquals(
+            ['Rambo'],
+            $this->mapTitles($movies)
+        );
+    }
+
     /**
      * @param array{id: int, title: string, year: int, genre: string} $values
      * @return Movie
@@ -149,5 +182,21 @@ final class ObjectRepositoryTest extends TestCase
         $movie->setGenre($values['genre']);
 
         return $movie;
+    }
+
+    /**
+     * @param ObjectCollection<array-key,Movie> $movies
+     * @return array<array-key,string|null>
+     */
+    private function mapTitles(ObjectCollection $movies): array
+    {
+        return $movies
+            ->map(
+                function (Movie $movie) {
+                    return $movie->getTitle();
+                }
+            )
+            ->getValues()
+        ;
     }
 }
