@@ -9,6 +9,6 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @template T of object
  * @template-extends ArrayCollection<TKey,T>
  */
-final class ObjectCollection extends ArrayCollection
+class ObjectCollection extends ArrayCollection
 {
 }
