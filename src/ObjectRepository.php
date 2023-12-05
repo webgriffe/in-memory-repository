@@ -49,14 +49,14 @@ abstract class ObjectRepository implements DoctrineObjectRepository
 
     /**
      * @param array<string, mixed> $criteria
-     * @param string[]|null        $orderBy
-     * @param int|null             $limit
-     * @param int|null             $offset
+     * @param array<string, string>|null $orderBy
+     * @param int|null $limit
+     * @param int|null $offset
+     * @return ObjectCollection<TKey,T>
      *
      * @throws UnexpectedValueException
      *
      * @psalm-suppress ImplementedReturnTypeMismatch
-     * @return ObjectCollection<TKey,T>
      */
     public function findBy(array $criteria, ?array $orderBy = null, $limit = null, $offset = null): ObjectCollection
     {
