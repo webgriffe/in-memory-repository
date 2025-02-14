@@ -6,13 +6,17 @@ on:
   pull_request:
     branches: [ master ]
 
-env:
-  PHP_VERSION: '8.0'
-
 jobs:
   build:
 
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        php: [ '8.0', '8.1', '8.2', '8.3', '8.4' ]
+      fail-fast: false
+
+    name: PHP ${{ matrix.php }}
 
     steps:
       - uses: actions/checkout@v2
@@ -20,7 +24,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "${{ env.PHP_VERSION }}"
+          php-version: "${{ matrix.php }}"
           tools: composer-require-checker
 
       - name: Validate composer.json and composer.lock
