@@ -11,6 +11,7 @@ use UnexpectedValueException;
  * @template T of object
  * @implements DoctrineObjectRepository<T>
  * @template-implements DoctrineObjectRepository<T>
+ * @api
  */
 abstract class ObjectRepository implements DoctrineObjectRepository
 {
