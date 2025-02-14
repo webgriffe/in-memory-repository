@@ -50,10 +50,5 @@ jobs:
       - name: Run composer-require-checker
         run: composer-require-checker check
 
-      - name: Install roave/backward-compatibility-check.
-        run: |
-          rm -rf composer.lock vendor/
-          composer require --dev roave/backward-compatibility-check
-
-      - name: Run roave/backward-compatibility-check.
-        run: vendor/bin/roave-backward-compatibility-check --format=github-actions
+      - name: "Check for BC breaks"
+        uses: docker://nyholm/roave-bc-check-ga
