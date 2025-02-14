@@ -20,7 +20,7 @@ abstract class ObjectRepository implements DoctrineObjectRepository
     /**
      * @param ObjectCollection<TKey,T>|null $objectCollection
      */
-    public function __construct(ObjectCollection $objectCollection = null)
+    public function __construct(?ObjectCollection $objectCollection = null)
     {
         if ($objectCollection === null) {
             /** @var ObjectCollection<TKey,T> $objectCollection */
