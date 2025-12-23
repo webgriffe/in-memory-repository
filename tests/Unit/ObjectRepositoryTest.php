@@ -87,8 +87,9 @@ final class ObjectRepositoryTest extends TestCase
         $movies = $this->movieRepository->findBy(['year' => 1986, 'genre' => 'Action']);
 
         $this->assertCount(1, $movies);
-        $this->assertInstanceOf(Movie::class, $movies->first());
-        $this->assertEquals('Top Gun', $movies->first()->getTitle());
+        $first = $movies[0];
+        $this->assertInstanceOf(Movie::class, $first);
+        $this->assertEquals('Top Gun', $first->getTitle());
     }
 
     /** @test */
@@ -106,10 +107,12 @@ final class ObjectRepositoryTest extends TestCase
         $movies = $this->movieRepository->findBy([], ['year' => 'DESC']);
 
         $this->assertCount(4, $movies);
-        $this->assertInstanceOf(Movie::class, $movies->first());
-        $this->assertInstanceOf(Movie::class, $movies->last());
-        $this->assertEquals(2001, $movies->first()->getYear());
-        $this->assertEquals(1982, $movies->last()->getYear());
+        $first = $movies[0];
+        $last = $movies[3];
+        $this->assertInstanceOf(Movie::class, $first);
+        $this->assertInstanceOf(Movie::class, $last);
+        $this->assertEquals(2001, $first->getYear());
+        $this->assertEquals(1982, $last->getYear());
     }
 
     /** @test */
@@ -118,10 +121,12 @@ final class ObjectRepositoryTest extends TestCase
         $movies = $this->movieRepository->findBy([], ['year' => 'ASC']);
 
         $this->assertCount(4, $movies);
-        $this->assertInstanceOf(Movie::class, $movies->first());
-        $this->assertInstanceOf(Movie::class, $movies->last());
-        $this->assertEquals(1982, $movies->first()->getYear());
-        $this->assertEquals(2001, $movies->last()->getYear());
+        $first = $movies[0];
+        $last = $movies[3];
+        $this->assertInstanceOf(Movie::class, $first);
+        $this->assertInstanceOf(Movie::class, $last);
+        $this->assertEquals(1982, $first->getYear());
+        $this->assertEquals(2001, $last->getYear());
     }
 
     /** @test */
@@ -189,18 +194,16 @@ final class ObjectRepositoryTest extends TestCase
     }
 
     /**
-     * @param ObjectCollection<array-key,Movie> $movies
+     * @param Movie[] $movies
      * @return array<array-key,string|null>
      */
-    private function mapTitles(ObjectCollection $movies): array
+    private function mapTitles(array $movies): array
     {
-        return $movies
-            ->map(
-                function (Movie $movie) {
-                    return $movie->getTitle();
-                }
-            )
-            ->getValues()
-        ;
+        return array_map(
+            function (Movie $movie): ?string {
+                return $movie->getTitle();
+            },
+            $movies,
+        );
     }
 }
