@@ -76,7 +76,7 @@ abstract class ObjectRepository implements DoctrineObjectRepository
         $matching = $this->objectCollection->matching($criteriaObject);
 
         /** @var array<TKey, T> $result */
-        $result = $matching->toArray();
+        $result = array_values($matching->toArray());
 
         return $result;
     }
