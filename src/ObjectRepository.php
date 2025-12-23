@@ -34,16 +34,17 @@ abstract class ObjectRepository implements DoctrineObjectRepository
      * @param mixed $id
      * @return T|null
      */
-    public function find($id)
+    #[\Override]
+    public function find($id): null|object
     {
         return $this->findOneBy([$this->getIdProperty() => $id]);
     }
 
     /**
-     * @psalm-suppress ImplementedReturnTypeMismatch
-     * @return ObjectCollection<TKey,T>
+     * @return array<TKey,T>
      */
-    public function findAll(): ObjectCollection
+    #[\Override]
+    public function findAll(): array
     {
         return $this->findBy([]);
     }
@@ -53,13 +54,12 @@ abstract class ObjectRepository implements DoctrineObjectRepository
      * @param array<string, string>|null $orderBy
      * @param int|null $limit
      * @param int|null $offset
-     * @return ObjectCollection<TKey,T>
+     * @return array<TKey,T>
      *
      * @throws UnexpectedValueException
-     *
-     * @psalm-suppress ImplementedReturnTypeMismatch
      */
-    public function findBy(array $criteria, ?array $orderBy = null, $limit = null, $offset = null): ObjectCollection
+    #[\Override]
+    public function findBy(array $criteria, ?array $orderBy = null, $limit = null, $offset = null): array
     {
         $criteriaObject = Criteria::create();
         /** @psalm-suppress MixedAssignment */
@@ -75,7 +75,10 @@ abstract class ObjectRepository implements DoctrineObjectRepository
         /** @var ObjectCollection<TKey,T> $matching */
         $matching = $this->objectCollection->matching($criteriaObject);
 
-        return $matching;
+        /** @var array<TKey, T> $result */
+        $result = $matching->toArray();
+
+        return $result;
     }
 
     /**
@@ -83,21 +86,23 @@ abstract class ObjectRepository implements DoctrineObjectRepository
      *
      * @return T|null
      */
-    public function findOneBy(array $criteria)
+    #[\Override]
+    public function findOneBy(array $criteria): object|null
     {
-        /** @var T|false $first */
-        $first = $this->findBy($criteria)->first();
+        /** @var T[] $results */
+        $results = $this->findBy($criteria);
+        if (!empty($results)) {
+            return reset($results);
+        }
 
-        return $first ?: null;
+        return null;
     }
 
     /**
      * @return class-string<T>
      */
-    abstract public function getClassName();
+    #[\Override]
+    abstract public function getClassName(): string;
 
-    /**
-     * @return string
-     */
-    abstract protected function getIdProperty();
+    abstract protected function getIdProperty(): string;
 }
